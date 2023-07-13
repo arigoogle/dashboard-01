@@ -1,5 +1,7 @@
 import { DollarCircleOutlined, ShoppingCartOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons';
-import { Card, Space, Statistic, Typography } from 'antd';
+import { Card, Space, Statistic, Table, Typography } from 'antd';
+import { useEffect, useState } from 'react';
+import getOrders from '../../API/Index';
 
 function Dashboard() {
   return (
@@ -11,25 +13,64 @@ function Dashboard() {
         <DashboardCard icon={<UserOutlined/>} title={"Customers"} value={199}/>
         <DashboardCard icon={<DollarCircleOutlined/>} title={"Revenue"} value={921092}/>
       </Space>
+      <Space>
+        <RecentOrders/>
+      </Space>
     </div>
   );
 }
 
-
 // eslint-disable-next-line react/prop-types
-function DashboardCard({title, value, icon}) {
+function DashboardCard({ title, value, icon }) {
   return (
     <Card>
-      <Space direction='horizontal' >
+      <Space direction='horizontal'>
         {icon}
-        <Statistic
-          title={title}
-          value={value}
-        />
+        <Statistic title={title} value={value} />
       </Space>
     </Card>
   );
 }
 
+function RecentOrders() {
+  const [dataSource, setDataSource] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    getOrders().then((res) => {
+      // console.log(res.products);
+      setDataSource(res.products);
+      setLoading(false);
+    });
+  }, []);
+  
+  const columns = [
+    {
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'title',
+    },
+    {
+      title: 'Quantity',
+      dataIndex: 'quantity',
+      key:'quantity',
+    },
+    {
+      title: 'Price',
+      dataIndex: 'discountedPrice',
+      key : 'price',
+    },
+  ];
+
+  return (
+    <Table
+      columns={columns}
+      loading={loading}
+      dataSource={dataSource}
+      rowKey="id"
+    />
+  );
+}
 
 export default Dashboard;
