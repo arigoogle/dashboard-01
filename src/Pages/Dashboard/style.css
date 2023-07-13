@@ -1,0 +1,9 @@
+.icon-in-dashboard .ant-space-item{
+    background-color: red !important;
+}
+
+.custom-dashboard .ant-space-item>span{
+    background-color: greenyellow;
+    padding: 10px;
+    border-radius: 12px;
+}
