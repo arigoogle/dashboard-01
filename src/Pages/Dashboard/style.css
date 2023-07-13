@@ -2,7 +2,7 @@
     background-color: red !important;
 }
 
-.custom-dashboard .ant-space-item>span{
+.custom-dashboard .ant-space-item>span.anticon{
     background-color: greenyellow;
     padding: 10px;
     border-radius: 12px;

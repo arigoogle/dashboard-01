@@ -1,20 +1,24 @@
 import { DollarCircleOutlined, ShoppingCartOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons';
 import { Card, Space, Statistic, Table, Typography } from 'antd';
 import { useEffect, useState } from 'react';
-import getOrders from '../../API/Index';
+import { getOrders } from '../../API/Index';
+import ChartDashboard from '../../Components/ChartDashboard';
 
 function Dashboard() {
   return (
     <div className='custom-dashboard'>
-      <Typography.Title level={4}>Dashboard</Typography.Title>
-      <Space direction="horizontal">
-        <DashboardCard icon={<ShoppingCartOutlined/>} title={"Orders"} value={1234}/>
-        <DashboardCard icon={<ShoppingOutlined/>} title={"Inventory"} value={12002}/>
-        <DashboardCard icon={<UserOutlined/>} title={"Customers"} value={199}/>
-        <DashboardCard icon={<DollarCircleOutlined/>} title={"Revenue"} value={921092}/>
-      </Space>
-      <Space>
-        <RecentOrders/>
+      <Space size={20} direction='vertical'>
+        <Typography.Title level={4}>Dashboard</Typography.Title>
+        <Space direction="horizontal">
+          <DashboardCard icon={<ShoppingCartOutlined/>} title={"Orders"} value={1234}/>
+          <DashboardCard icon={<ShoppingOutlined/>} title={"Inventory"} value={12002}/>
+          <DashboardCard icon={<UserOutlined/>} title={"Customers"} value={199}/>
+          <DashboardCard icon={<DollarCircleOutlined/>} title={"Revenue"} value={921092}/>
+        </Space>
+        <Space>
+          <RecentOrders/>
+          <ChartDashboard/>
+        </Space>
       </Space>
     </div>
   );
@@ -40,11 +44,10 @@ function RecentOrders() {
     setLoading(true);
     getOrders().then((res) => {
       // console.log(res.products);
-      setDataSource(res.products);
+      setDataSource(res.products.splice(0,3));
       setLoading(false);
     });
   }, []);
-  
   const columns = [
     {
       title: 'Title',
@@ -62,14 +65,17 @@ function RecentOrders() {
       key : 'price',
     },
   ];
-
-  return (
-    <Table
-      columns={columns}
-      loading={loading}
-      dataSource={dataSource}
-      rowKey="id"
-    />
+  return ( 
+    <>
+      <Typography.Text>Recent Orders</Typography.Text>
+      <Table
+        columns={columns}
+        loading={loading}
+        dataSource={dataSource}
+        pagination={false}
+        rowKey="id"
+      />
+    </>
   );
 }
 
