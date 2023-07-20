@@ -17,7 +17,9 @@ function Dashboard() {
         </Space>
         <Space>
           <RecentOrders/>
-          <ChartDashboard/>
+          <Card style={{ width:500, height:250 }}>
+            <ChartDashboard/>
+          </Card>
         </Space>
       </Space>
     </div>
