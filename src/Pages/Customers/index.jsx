@@ -1,4 +1,4 @@
-import { Space, Table, Typography } from "antd"
+import { Avatar, Space, Table, Typography } from "antd"
 import { useEffect, useState } from "react"
 import { getCustomers } from "../../API/Index"
 
@@ -14,26 +14,40 @@ function Customers() {
   })
 
   return (
-    <Space>
+    <Space direction="vertical">
         <Typography.Title level={4}>Customers</Typography.Title>
         <Table
           loading={loading}
           columns={[
             {
-              title:"Name",
+              title: "Photo",
+              dataIndex : "image",
+              render : (link) =>{
+                return <Avatar src={link}/>
+              }
+            },
+            {
+              title:"First Name",
               dataIndex:"firstName"
             },
             {
-              title:"Age",
-              dataIndex:"age"
-            },
-            {
-              title:"Gender",
-              dataIndex:"gender"
+              title:"Last Name",
+              dataIndex:"lastName"
             },
             {
               title:"Email",
               dataIndex:"email"
+            },
+            {
+              title:"Phone Number",
+              dataIndex:"phone"
+            },
+            {
+              title:"Address",
+              dataIndex:"address",
+              render : (address) => {
+                return <span>{address.address}, {address.city}</span>
+              }
             },
           ]}
         dataSource={dataSource}

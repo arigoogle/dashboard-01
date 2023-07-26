@@ -1,19 +1,38 @@
 import { DollarCircleOutlined, ShoppingCartOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons';
 import { Card, Space, Statistic, Table, Typography } from 'antd';
 import { useEffect, useState } from 'react';
-import { getOrders } from '../../API/Index';
+import { getCustomers, getInventory, getOrders} from '../../API/Index';
 import ChartDashboard from '../../Components/ChartDashboard';
 
 function Dashboard() {
+  const [orders, setOrders] = useState(0)
+  const [inventory, setInventory] = useState(0)
+  const [customers, setCustomers] = useState(0)
+  const [revenue, setRevenue] = useState(0)
+
+  useEffect(() => {
+      getOrders().then(res=>{
+        setOrders(res.total)
+        setRevenue(res.discountedTotal)
+      })
+      getInventory().then(res=>{
+        setInventory(res.total)
+      })
+      getCustomers().then(res=>{
+        setCustomers(res.total)
+      })
+  }, [])
+  
+
   return (
     <div className='custom-dashboard'>
       <Space size={20} direction='vertical'>
         <Typography.Title level={4}>Dashboard</Typography.Title>
         <Space direction="horizontal">
-          <DashboardCard icon={<ShoppingCartOutlined/>} title={"Orders"} value={1234}/>
-          <DashboardCard icon={<ShoppingOutlined/>} title={"Inventory"} value={12002}/>
-          <DashboardCard icon={<UserOutlined/>} title={"Customers"} value={199}/>
-          <DashboardCard icon={<DollarCircleOutlined/>} title={"Revenue"} value={921092}/>
+          <DashboardCard icon={<ShoppingCartOutlined/>} title={"Orders"} value={orders}/>
+          <DashboardCard icon={<ShoppingOutlined/>} title={"Inventory"} value={inventory}/>
+          <DashboardCard icon={<UserOutlined/>} title={"Customers"} value={customers}/>
+          <DashboardCard icon={<DollarCircleOutlined/>} title={"Revenue"} value={revenue}/>
         </Space>
         <Space>
           <RecentOrders/>
